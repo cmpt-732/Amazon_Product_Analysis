@@ -1,5 +1,7 @@
 from pyspark.sql import SparkSession, functions, types
 import sys
+import plotly
+from plotly import express as px
 assert sys.version_info >= (3,5)
 
 def weightedImage(img):
@@ -38,8 +40,9 @@ def main(input):
     weighted_Average = df2.groupBy(df2.asin).agg((functions.sum(df2.overall*df2.Weight)/functions.sum(df2.Weight)),functions.count('reviewerID'))
     #weighted_Average.show(10)
     weighted_Average = weighted_Average.toDF('Product_id', 'Weighted_Avg','Num_of_purchases')
-    #weighted_Average.show(10) 
+    weighted_Average = weighted_Average.sort(weighted_Average.Num_of_purchases.desc())
     df2 = df2.join(weighted_Average, on = df2.asin == weighted_Average.Product_id)
+    #df2 = df2.sort(df2.Weighted_Avg.desc())
     dfFinal = df2.select(df2.reviewerID, df2.asin, df2.Weighted_Avg, df2.Num_of_purchases) 
     #dfFinal.show(10)
 
@@ -55,9 +58,27 @@ def main(input):
     resultDF = dfFinal.join(metaDf, on = dfFinal.asin == metaDf.prod_id)
     #resultDF.show(50)
     output = resultDF.distinct()
-    #output.show(50)
-    res = output.select(output.reviewerID, output.asin, output.Weighted_Avg, output.Num_of_purchases, output.product_name)
-    res.show(10)
+    #Top products with highest weighted_avg
+    res = output.groupBy(output.asin, output.product_name).agg(functions.max('Weighted_Avg').alias('final_weighted_avg'))
+    #res.show(10)
+    pandDF = res.limit(1000).toPandas()
+    WeightedDf = pandDF.sort_values(by = ['final_weighted_avg'], ascending = False)
+    #print(WeightedDf.head(100))
+    #print(pandDF.head(100))
+    fig = px.scatter(WeightedDf, x = 'final_weighted_avg', y = 'product_name' ,title = 'Products to recommend',height=800, width=2000)
+    fig.update_layout(xaxis_title = 'Weighted Average', yaxis_title = 'Products')
+    fig.show()
+    
+    #which customer prefers which product in this category,
+    #num of purchase and the product name:
+    dfPur = output.groupBy(output.product_name).agg(functions.max('Num_of_purchases').alias('Num_purchases'))
+    pandDf1 = dfPur.limit(100).toPandas()
+    sortedDfPur = pandDf1.sort_values(by = ['Num_purchases'], ascending = False)
+    #print(sortedDfPur.head(10))
+    fig1 = px.pie(sortedDfPur, values = 'Num_purchases', names = 'product_name' ,title = 'Top 100 Customer Preferences',height=1000, width=2000)
+    fig1.update_layout(xaxis_title = 'Products', yaxis_title = 'Number of purchases')
+    fig1.show()
+
 
 if __name__ == '__main__':
     spark = SparkSession.builder.appName('Parse Json file').getOrCreate()
