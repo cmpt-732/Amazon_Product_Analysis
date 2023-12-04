@@ -36,7 +36,7 @@ Notes on how to run the code can be found in RUNNING.md, and a more detailed ove
 |-- RUNNING.md
 ```
 
-## Data Knyts Team Members
+## Team Members
 
 - Zhenmin He, 301589203
 - Hershil Piplani, 301591594
