@@ -52,7 +52,7 @@ def main(input):
     output = resultDF.distinct()
 
     #Top products with highest weighted_avg
-    res = output.groupBy(output.asin, output.product_name).agg(functions.max('Weighted_Avg').alias('final_weighted_avg'))
+    res = output.groupBy(output.product_name).agg(functions.max('Weighted_Avg').alias('final_weighted_avg'))
     pandDF = res.limit(1000).toPandas()
     WeightedDf = pandDF.sort_values(by = ['final_weighted_avg'], ascending = False)
 
