@@ -13,7 +13,7 @@ Notes on how to run the code can be found in RUNNING.md, and a more detailed ove
 ## Structure
 
 ```
-.
+
 |-- Code
     |--Recommendation
         |-- Product Appraisal
@@ -34,6 +34,14 @@ Notes on how to run the code can be found in RUNNING.md, and a more detailed ove
     |-- Project Report
 |-- README.md
 |-- RUNNING.md
+```
+
+``` mermaid
+graph TD;
+    A-->B;
+    A-->C;
+    B-->D;
+    C-->D;
 ```
 
 ## Team Members
