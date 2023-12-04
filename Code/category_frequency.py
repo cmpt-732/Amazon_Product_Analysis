@@ -1,7 +1,7 @@
 import gzip
 import json
 from sqlite3 import Row
-
+from plotly import express as px
 from pyspark import SparkConf, SparkContext
 import sys
 
@@ -19,9 +19,9 @@ def main():
         types.StructField('reviewerID', types.StringType()),
         types.StructField('verified', types.BooleanType())
     ])
-    office_products = spark.read.schema(reviews_schema).json("reviews/Office_Products_5.json.gz")
-    clothing_shoes = spark.read.schema(reviews_schema).json("reviews/Clothing_Shoes_and_Jewelry_5.json.gz")
-    movies_tv = spark.read.schema(reviews_schema).json("reviews/Movies_and_TV_5.json.gz")
+    office_products = spark.read.schema(reviews_schema).json("/Users/hersh/Documents/BigDataLab/Project/Office_Products.json")
+    clothing_shoes = spark.read.schema(reviews_schema).json("/Users/hersh/Documents/BigDataLab/Project/Clothing_Shoes_and_Jewelry_5.json")
+    movies_tv = spark.read.schema(reviews_schema).json("/Users/hersh/Documents/BigDataLab/Project/Movies_and_TV.json")
 
     office_products = office_products.where(office_products['verified'] == True)
     clothing_shoes = clothing_shoes.where(clothing_shoes['verified'] == True)
@@ -35,8 +35,15 @@ def main():
     cond = "psf.when" + ".when".join(["(psf.col('" + c + "') == psf.col('max_value'), psf.lit('" + c + "'))" for c in joined.columns])
     joined_max = joined.withColumn("max_value", psf.greatest(*joined.columns[1:4])) \
         .withColumn("MAX", eval(cond))
-    joined_max.withColumn("most_often", functions.split(joined_max.MAX, '_')[0]) \
-        .show()
+    joined_max = joined_max.withColumn("most_often", functions.split(joined_max.MAX, '_')[0])
+    
+    # which customer prefers which category? 
+    joined_max_panDf = joined_max.limit(1000).toPandas()
+    #print(joined_max_panDf.head(10))
+    fig2 = px.pie(joined_max_panDf,values = 'max_value', names = 'most_often', title='categories', hole = 0.5)
+    fig2.show()
+
+    
 
 if __name__ == '__main__':
     spark = SparkSession.builder.appName('example code').getOrCreate()
