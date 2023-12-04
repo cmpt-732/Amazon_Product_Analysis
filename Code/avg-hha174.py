@@ -1,6 +1,6 @@
 import sys
 assert sys.version_info >= (3, 5) # make sure we have Python 3.5+
-
+from plotly import express as px
 from pyspark.sql import SparkSession, functions, types
 
 # add more functions as necessary
@@ -15,14 +15,14 @@ review_schema = types.StructType([
 weight_image = 1
 weight_vote = 1                    
 
-def main(inputs, output):
+def main(inputs):
     # main logic starts here
     cloumn_name = inputs.split('_')[0].lower()
     
     reviews = spark.read.json(inputs, schema=review_schema)
     reviews = reviews.where(reviews['verified'])
     reviews = reviews.withColumn('count', functions.lit(1))
-    reviews.show()
+    #reviews.show()
     
     #vote
     reviews = reviews.withColumn('vote_value', reviews.vote.cast(types.IntegerType()))
@@ -37,34 +37,59 @@ def main(inputs, output):
     #weight
     reviews = reviews.withColumn('weight', functions.lit(1)+weight_image*reviews['num_images'] + weight_vote*reviews['num_vote'])
     #total_weight = reviews.groupBy().sum().collect()[0][0]
-    
+ 
     #weighted average
     weighted_avg = reviews.groupBy('asin').agg(
         (functions.sum(reviews['overall']*reviews['weight'])/functions.sum(reviews['weight'])).alias('weighted_avg'),
         functions.count('count').alias('num_purchase'))
-    weighted_avg.show(20)
-    weighted_avg.write.json('avg-' + cloumn_name)
+    
+
+    metadata = types.StructType([
+        types.StructField('asin', types.StringType()),
+        types.StructField('title', types.StringType())
+    ]) 
+
+    path = '/Users/hersh/Documents/BigDataLab/Project/meta_Movies_and_TV.json'
+    metaDf = spark.read.json(path, schema = metadata)
+    metaDf = metaDf.toDF('prod_id','product_name')
+    best_product = weighted_avg.where(weighted_avg['num_purchase'] > 100)
+    resultDF = best_product.join(metaDf, on = best_product.asin == metaDf.prod_id)
+    output = resultDF.distinct()
+    dfPur2 = output.groupBy(output.product_name).agg(functions.max('num_purchase').alias('Num_purchases'))
+    pandDF3 = dfPur2.limit(100).toPandas()
+    sorteddfPur2 = pandDF3.sort_values(by = ['Num_purchases'], ascending = False) 
+    #print(sorteddfPur2.head(10))
+    fig3 = px.pie(sorteddfPur2, values = 'Num_purchases', names = 'product_name', title = 'Top 100 Customer Preferences in Movies and Tv', height = 1800, width = 2000)
+    fig3.show() 
+
+    #Products with hightes weighted average:
+    res2 = output.groupBy(output.product_name).agg(functions.max('weighted_avg').alias('final_weighted_avg'))
+    pandDF4 = res2.limit(1000).toPandas()
+    WeightedDf1 = pandDF4.sort_values(by = ['final_weighted_avg'], ascending = False)
+
+    fig4 = px.scatter(WeightedDf1, x = 'final_weighted_avg', y = 'product_name' ,title = 'Movies to recommend',height=800, width=2000)
+    fig4.update_layout(xaxis_title = 'Weighted Average', yaxis_title = 'Products')
+    fig4.show()
+
+
+    """weighted_avg.write.json('avg-' + cloumn_name)
     
     movies = weighted_avg
     
-    #max rating product
+ max rating product
     best_product = weighted_avg.where(weighted_avg['num_purchase'] > 100)
     maxs = best_product.agg(functions.max(best_product['weighted_avg']).alias('max'))
     best_product = best_product.join(maxs)
     
     best_product = best_product.where(best_product['weighted_avg'] == best_product['max'])
-    best_product.show()
+    #best_product.show() """
     
-    #write output to file
-    result = best_product.select(best_product['asin'].alias(cloumn_name))
-    result.show()
-    result.write.json(output + '-' + cloumn_name)
+
 
 if __name__ == '__main__':
     inputs = sys.argv[1]
-    output = sys.argv[2]
     spark = SparkSession.builder.appName('example code').getOrCreate()
     assert spark.version >= '3.0' # make sure we have Spark 3.0+
     spark.sparkContext.setLogLevel('WARN')
     sc = spark.sparkContext
-    main(inputs, output)
+    main(inputs)
