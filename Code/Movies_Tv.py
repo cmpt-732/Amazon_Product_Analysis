@@ -59,17 +59,18 @@ def main(inputs):
     pandDF3 = dfPur2.limit(100).toPandas()
     sorteddfPur2 = pandDF3.sort_values(by = ['Num_purchases'], ascending = False) 
     #print(sorteddfPur2.head(10))
-    fig3 = px.pie(sorteddfPur2, values = 'Num_purchases', names = 'product_name', title = 'Top 100 Customer Preferences in Movies and Tv', height = 1800, width = 2000)
-    fig3.show() 
+    sorteddfPur2.to_csv("sorteddfPur2.csv")
+    # fig3 = px.pie(sorteddfPur2, values = 'Num_purchases', names = 'product_name', title = 'Top 100 Customer Preferences in Movies and Tv', height = 1800, width = 2000)
+    # fig3.show() 
 
     #Products with hightes weighted average:
     res2 = output.groupBy(output.product_name).agg(functions.max('weighted_avg').alias('final_weighted_avg'))
     pandDF4 = res2.limit(1000).toPandas()
     WeightedDf1 = pandDF4.sort_values(by = ['final_weighted_avg'], ascending = False)
-
-    fig4 = px.scatter(WeightedDf1, x = 'final_weighted_avg', y = 'product_name' ,title = 'Movies to recommend',height=800, width=2000)
-    fig4.update_layout(xaxis_title = 'Weighted Average', yaxis_title = 'Products')
-    fig4.show()
+    WeightedDf1.to_csv("WeightedDf1.csv")
+    # fig4 = px.scatter(WeightedDf1, x = 'final_weighted_avg', y = 'product_name' ,title = 'Movies to recommend',height=800, width=2000)
+    # fig4.update_layout(xaxis_title = 'Weighted Average', yaxis_title = 'Products')
+    # fig4.show()
 
 
     """weighted_avg.write.json('avg-' + cloumn_name)

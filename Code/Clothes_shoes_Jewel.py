@@ -55,19 +55,15 @@ def main(input):
     res = output.groupBy(output.product_name).agg(functions.max('Weighted_Avg').alias('final_weighted_avg'))
     pandDF = res.limit(1000).toPandas()
     WeightedDf = pandDF.sort_values(by = ['final_weighted_avg'], ascending = False)
-
-    fig = px.scatter(WeightedDf, x = 'final_weighted_avg', y = 'product_name' ,title = 'Products to recommend',height=800, width=2000)
-    fig.update_layout(xaxis_title = 'Weighted Average', yaxis_title = 'Products')
-    fig.show()
+    WeightedDf.to_csv("weighted_df.csv")
     
     #which customer prefers which product in this category,
     #num of purchase and the product name:
     dfPur = output.groupBy(output.product_name).agg(functions.max('Num_of_purchases').alias('Num_purchases'))
     pandDf1 = dfPur.limit(100).toPandas()
     sortedDfPur = pandDf1.sort_values(by = ['Num_purchases'], ascending = False)
+    sortedDfPur.to_csv("clothing.csv")
     
-    fig1 = px.pie(sortedDfPur, values = 'Num_purchases', names = 'product_name' ,title = 'Top 100 Customer Preferences in Clothing, Shoes and Jewelery Category', height = 1000, width = 2000)
-    fig1.show()
 
 
 if __name__ == '__main__':

@@ -38,10 +38,10 @@ def main():
     joined_max = joined_max.withColumn("most_often", functions.split(joined_max.MAX, '_')[0])
     
     # which customer prefers which category? 
-    joined_max_panDf = joined_max.limit(1000).toPandas()
+    joined_max.limit(1000).toPandas().to_csv("frequencies.csv")
     #print(joined_max_panDf.head(10))
-    fig2 = px.pie(joined_max_panDf,values = 'max_value', names = 'most_often', title='categories', hole = 0.5)
-    fig2.show()
+ 
+    
 
     
 
