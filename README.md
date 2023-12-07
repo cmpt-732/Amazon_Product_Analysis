@@ -9,6 +9,10 @@ This is the project for SFU's CMPT 732 (Big Data I) course, with the goal of ana
 customized and better recommendations to customers and improve the products selling on the platform. 
 
 Notes on how to run the code can be found in RUNNING.md, and a more detailed overview can be found in the project report (under Documents).
+## Datasets: 
+
+We have used the Amazon Review Data 2018 data. Here we have used the 5-core subset and the metadata for the categories: 1) Clothing, Shoes, and Jewelry  2) Movies and Tv 3) Office Products. 
+Link to the datasets: [Dataset](https://cseweb.ucsd.edu/~jmcauley/datasets/amazon_v2/)
 
 ## Structure
 
@@ -37,13 +41,7 @@ Notes on how to run the code can be found in RUNNING.md, and a more detailed ove
         |-- frequency_component.py
         |-- movie_component.py
         |-- office_component.py
-|-- Datasets
-    |-- Reveiws TODO
-        |-- clothing
-        |-- movies
-        |-- office
-    |-- Meta TODO
-        |-- 
+
 |--requirements.txt
 |-- Documents
     |-- Project Proposal
