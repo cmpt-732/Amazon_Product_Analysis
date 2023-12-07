@@ -37,6 +37,13 @@ Notes on how to run the code can be found in RUNNING.md, and a more detailed ove
         |-- frequency_component.py
         |-- movie_component.py
         |-- office_component.py
+|-- Datasets
+    |-- Reveiws TODO
+        |-- clothing
+        |-- movies
+        |-- office
+    |-- Meta TODO
+        |-- 
 |--requirements.txt
 |-- Documents
     |-- Project Proposal
