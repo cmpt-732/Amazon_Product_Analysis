@@ -28,7 +28,7 @@ Notes on how to run the code can be found in RUNNING.md, and a more detailed ove
             |-- ml-hha174.py 
     |--Visualization
         |-- TODO.py
-|--requirements.txt
+
 |-- Documents
     |-- Project Proposal
     |-- Project Report
@@ -36,13 +36,7 @@ Notes on how to run the code can be found in RUNNING.md, and a more detailed ove
 |-- RUNNING.md
 ```
 
-``` mermaid
-graph TD;
-    A-->B;
-    A-->C;
-    B-->D;
-    C-->D;
-```
+
 
 ## Team Members
 
