@@ -19,9 +19,9 @@ def main():
         types.StructField('reviewerID', types.StringType()),
         types.StructField('verified', types.BooleanType())
     ])
-    office_products = spark.read.schema(reviews_schema).json("/Users/hersh/Documents/BigDataLab/Project/Office_Products.json")
-    clothing_shoes = spark.read.schema(reviews_schema).json("/Users/hersh/Documents/BigDataLab/Project/Clothing_Shoes_and_Jewelry_5.json")
-    movies_tv = spark.read.schema(reviews_schema).json("/Users/hersh/Documents/BigDataLab/Project/Movies_and_TV.json")
+    office_products = spark.read.schema(reviews_schema).json("/Users/jarvis/Amazon_Product_Analysis/Dataset/Office_Products_5.json.gz")
+    clothing_shoes = spark.read.schema(reviews_schema).json("/Users/jarvis/Amazon_Product_Analysis/Dataset/Clothing_Shoes_and_Jewelry_5.json.gz")
+    movies_tv = spark.read.schema(reviews_schema).json("/Users/jarvis/Amazon_Product_Analysis/Dataset/Movies_and_TV_5.json.gz")
 
     office_products = office_products.where(office_products['verified'] == True)
     clothing_shoes = clothing_shoes.where(clothing_shoes['verified'] == True)
@@ -36,14 +36,8 @@ def main():
     joined_max = joined.withColumn("max_value", psf.greatest(*joined.columns[1:4])) \
         .withColumn("MAX", eval(cond))
     joined_max = joined_max.withColumn("most_often", functions.split(joined_max.MAX, '_')[0])
-    
     # which customer prefers which category? 
-    joined_max.limit(1000).toPandas().to_csv("frequencies.csv")
-    #print(joined_max_panDf.head(10))
- 
-    
-
-    
+    joined_max.limit(1000).toPandas().to_csv("/Users/jarvis/Amazon_Product_Analysis/Results/frequencies.csv")
 
 if __name__ == '__main__':
     spark = SparkSession.builder.appName('example code').getOrCreate()
