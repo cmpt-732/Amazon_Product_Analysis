@@ -71,22 +71,7 @@ def main(inputs):
     # fig4 = px.scatter(WeightedDf1, x = 'final_weighted_avg', y = 'product_name' ,title = 'Movies to recommend',height=800, width=2000)
     # fig4.update_layout(xaxis_title = 'Weighted Average', yaxis_title = 'Products')
     # fig4.show()
-
-
-    """weighted_avg.write.json('avg-' + cloumn_name)
     
-    movies = weighted_avg
-    
- max rating product
-    best_product = weighted_avg.where(weighted_avg['num_purchase'] > 100)
-    maxs = best_product.agg(functions.max(best_product['weighted_avg']).alias('max'))
-    best_product = best_product.join(maxs)
-    
-    best_product = best_product.where(best_product['weighted_avg'] == best_product['max'])
-    #best_product.show() """
-    
-
-
 if __name__ == '__main__':
     inputs = sys.argv[1]
     spark = SparkSession.builder.appName('example code').getOrCreate()
