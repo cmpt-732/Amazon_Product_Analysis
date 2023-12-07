@@ -41,7 +41,6 @@ Link to the datasets: [Dataset](https://cseweb.ucsd.edu/~jmcauley/datasets/amazo
         |-- movie_component.py
         |-- office_component.py
 
-|--requirements.txt
 |-- Documents
     |-- Project Proposal
     |-- Project Report
