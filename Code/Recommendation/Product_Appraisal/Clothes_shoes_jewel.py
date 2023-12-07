@@ -44,7 +44,7 @@ def main(input):
         types.StructField('title', types.StringType())
     ]) 
 
-    path = '/Users/hersh/Documents/BigDataLab/Project/meta_Clothing_Shoes_and_Jewelry.json'
+    path = '/Users/jarvis/Amazon_Product_Analysis/Dataset/meta_Clothing_Shoes_and_Jewelry.json.gz'
 
     metaDf = spark.read.json(path, schema = metadata)
     metaDf = metaDf.toDF('prod_id','product_name')
@@ -55,14 +55,14 @@ def main(input):
     res = output.groupBy(output.product_name).agg(functions.max('Weighted_Avg').alias('final_weighted_avg'))
     pandDF = res.limit(1000).toPandas()
     WeightedDf = pandDF.sort_values(by = ['final_weighted_avg'], ascending = False)
-    WeightedDf.to_csv("weighted_df.csv")
+    WeightedDf.to_csv("/Users/jarvis/Amazon_Product_Analysis/Results/weighted_df.csv")
     
     #which customer prefers which product in this category,
     #num of purchase and the product name:
     dfPur = output.groupBy(output.product_name).agg(functions.max('Num_of_purchases').alias('Num_purchases'))
     pandDf1 = dfPur.limit(100).toPandas()
     sortedDfPur = pandDf1.sort_values(by = ['Num_purchases'], ascending = False)
-    sortedDfPur.to_csv("clothing.csv")
+    sortedDfPur.to_csv("/Users/jarvis/Amazon_Product_Analysis/Results/clothing.csv")
     
 
 
@@ -71,5 +71,5 @@ if __name__ == '__main__':
     assert spark.version >= '3.0'
     spark.sparkContext.setLogLevel('WARN')
     sc = spark.sparkContext
-    inputs = sys.argv[1]
+    inputs = "/Users/jarvis/Amazon_Product_Analysis/Dataset/Clothing_Shoes_and_Jewelry_5.json.gz"
     main(inputs)

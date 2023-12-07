@@ -49,7 +49,7 @@ def main(inputs):
         types.StructField('title', types.StringType())
     ]) 
 
-    path = '/Users/hersh/Documents/BigDataLab/Project/meta_Movies_and_TV.json'
+    path = '/Users/jarvis/Amazon_Product_Analysis/Dataset/meta_Movies_and_TV.json.gz'
     metaDf = spark.read.json(path, schema = metadata)
     metaDf = metaDf.toDF('prod_id','product_name')
     best_product = weighted_avg.where(weighted_avg['num_purchase'] > 100)
@@ -59,7 +59,7 @@ def main(inputs):
     pandDF3 = dfPur2.limit(100).toPandas()
     sorteddfPur2 = pandDF3.sort_values(by = ['Num_purchases'], ascending = False) 
     #print(sorteddfPur2.head(10))
-    sorteddfPur2.to_csv("sorteddfPur2.csv")
+    sorteddfPur2.to_csv("/Users/jarvis/Amazon_Product_Analysis/Results/sorteddfPur2.csv")
     # fig3 = px.pie(sorteddfPur2, values = 'Num_purchases', names = 'product_name', title = 'Top 100 Customer Preferences in Movies and Tv', height = 1800, width = 2000)
     # fig3.show() 
 
@@ -67,14 +67,14 @@ def main(inputs):
     res2 = output.groupBy(output.product_name).agg(functions.max('weighted_avg').alias('final_weighted_avg'))
     pandDF4 = res2.limit(1000).toPandas()
     WeightedDf1 = pandDF4.sort_values(by = ['final_weighted_avg'], ascending = False)
-    WeightedDf1.to_csv("WeightedDf1.csv")
+    WeightedDf1.to_csv("/Users/jarvis/Amazon_Product_Analysis/Results/WeightedDf1.csv")
     # fig4 = px.scatter(WeightedDf1, x = 'final_weighted_avg', y = 'product_name' ,title = 'Movies to recommend',height=800, width=2000)
     # fig4.update_layout(xaxis_title = 'Weighted Average', yaxis_title = 'Products')
     # fig4.show()
     
 if __name__ == '__main__':
-    inputs = sys.argv[1]
-    spark = SparkSession.builder.appName('example code').getOrCreate()
+    inputs = "/Users/jarvis/Amazon_Product_Analysis/Dataset/Movies_and_TV_5.json.gz"
+    spark = SparkSession.builder.appName('Parse Json file').getOrCreate()
     assert spark.version >= '3.0' # make sure we have Spark 3.0+
     spark.sparkContext.setLogLevel('WARN')
     sc = spark.sparkContext

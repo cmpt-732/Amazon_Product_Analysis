@@ -49,7 +49,7 @@ def main(inputs):
         types.StructField('title', types.StringType())
     ]) 
 
-    path = '/Users/hersh/Documents/BigDataLab/Project/meta_Office_Products.json'
+    path = '/Users/jarvis/Amazon_Product_Analysis/Dataset/meta_Office_Products.json.gz'
     metaDf = spark.read.json(path, schema = metadata)
     metaDf = metaDf.toDF('prod_id','product_name')
     best_product = weighted_avg.where(weighted_avg['num_purchase'] > 100)
@@ -58,7 +58,7 @@ def main(inputs):
     dfPur2 = output.groupBy(output.product_name).agg(functions.max('num_purchase').alias('Num_purchases'))
     pandDF3 = dfPur2.limit(100).toPandas()
     sorteddfPur2 = pandDF3.sort_values(by = ['Num_purchases'], ascending = False) 
-    sorteddfPur2.to_csv("Office.csv")
+    sorteddfPur2.to_csv("/Users/jarvis/Amazon_Product_Analysis/Results/Office.csv")
     #print(sorteddfPur2.head(10))
     #fig3 = px.pie(sorteddfPur2, values = 'Num_purchases', names = 'product_name', title = 'Top 100 Customer Preferences in Office Products Category', height = 1500, width = 2900)
     #fig3.show() 
@@ -67,13 +67,13 @@ def main(inputs):
     res2 = output.groupBy(output.product_name).agg(functions.max('weighted_avg').alias('final_weighted_avg'))
     pandDF4 = res2.limit(1000).toPandas()
     WeightedDf1 = pandDF4.sort_values(by = ['final_weighted_avg'], ascending = False)
-    WeightedDf1.to_csv("weights_office.csv")
+    WeightedDf1.to_csv("/Users/jarvis/Amazon_Product_Analysis/Results/weights_office.csv")
 
 
 
 if __name__ == '__main__':
-    inputs = sys.argv[1]
-    spark = SparkSession.builder.appName('example code').getOrCreate()
+    inputs = "/Users/jarvis/Amazon_Product_Analysis/Dataset/Office_Products_5.json.gz"
+    spark = SparkSession.builder.appName('Parse Json file').getOrCreate()
     assert spark.version >= '3.0' # make sure we have Spark 3.0+
     spark.sparkContext.setLogLevel('WARN')
     sc = spark.sparkContext
