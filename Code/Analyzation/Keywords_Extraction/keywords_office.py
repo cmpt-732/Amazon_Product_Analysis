@@ -35,14 +35,14 @@ def main():
                 types.StructField('reviewTime', types.StringType()),
             ])
 
-            office_reviews = spark.read.schema(reviews_schema).json("/Users/hersh/Documents/BigDataLab/Project/Office_Products.json").select("asin","reviewText","overall").cache()
+            office_reviews = spark.read.schema(reviews_schema).json("/Users/jarvis/Amazon_Product_Analysis/Dataset/Office_Products_5.json.gz").select("asin","reviewText","overall").cache()
 
             office_good_reviews = office_reviews.filter(office_reviews["overall"] >= 4.0)
             get_keywords_udf = udf(get_keywords, ArrayType(types.StructType([types.StructField("score", FloatType(), False),
     types.StructField("keywords", StringType(), False)])))
             office_good_reviews = office_good_reviews.filter(office_good_reviews["reviewText"].isNotNull())
             office_good_reviews = office_good_reviews.withColumn("key_words", get_keywords_udf(office_good_reviews["reviewText"]))
-            office_good_reviews.select("key_words").limit(500).toPandas().to_json("office_keywords.json")
+            office_good_reviews.select("key_words").limit(500).toPandas().to_json("/Users/jarvis/Amazon_Product_Analysis/Results/office_keywords.json")
 
 
 
