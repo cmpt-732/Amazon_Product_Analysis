@@ -6,11 +6,11 @@ import re
 
 def showdataframe():
     col1, col2 = st.columns(2)
-    df1 = pd.read_csv("weighted_df.csv")
+    df1 = pd.read_csv("/Users/jarvis/Amazon_Product_Analysis/Results/weighted_df.csv")
     df1 = df1.loc[:, ~df1.columns.str.contains('^Unnamed')]
     col1.dataframe(df1, width = 1800)
 
-    df2 = pd.read_csv("clothing.csv")
+    df2 = pd.read_csv("/Users/jarvis/Amazon_Product_Analysis/Results/clothing.csv")
     df2 = df2.loc[:, ~df2.columns.str.contains('^Unnamed')]
     col2.dataframe(df2)
 
@@ -21,8 +21,8 @@ def render():
     col1, col2 = st.columns(2)
     button1 = col1.button("Seller Analytics", key = "bt-2")
     button2 = col2.button("Customer Analytics" , key = "bt-3")
-    weighted = pd.read_csv("weighted_df.csv")
-    pd_df = pd.read_csv('clothing.csv')
+    weighted = pd.read_csv("/Users/jarvis/Amazon_Product_Analysis/Results/weighted_df.csv")
+    pd_df = pd.read_csv('/Users/jarvis/Amazon_Product_Analysis/Results/clothing.csv')
     if button1:
         center = st.container()
         with center:
@@ -31,7 +31,7 @@ def render():
             st.plotly_chart(fig)
         st.divider()
         st.subheader("Predicted Number of purchases by customers")
-        df3 = pd.read_csv('ml_clothing.csv')
+        df3 = pd.read_csv('/Users/jarvis/Amazon_Product_Analysis/Results/ml_clothing.csv')
         fig2 = px.histogram(df3, x = 'num_purchase', color = 'type', histnorm = 'percent')
         st.plotly_chart(fig2)
         
@@ -41,7 +41,7 @@ def render():
         st.plotly_chart(fig1)
         st.divider()
     st.subheader("More Insights from the dataset")
-    worddf = pd.read_json('clothing_keywords.json')
+    worddf = pd.read_json('/Users/jarvis/Amazon_Product_Analysis/Results/clothing_keywords.json')
     rows = worddf.values
     pairs=[]
     for row in rows:

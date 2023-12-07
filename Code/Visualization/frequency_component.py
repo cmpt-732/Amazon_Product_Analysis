@@ -11,7 +11,7 @@ def render():
     st.divider()
     st.header("Customer preference based on the 3 categories")
     st.divider()
-    pd_df = pd.read_csv('frequencies.csv')
+    pd_df = pd.read_csv('/Users/jarvis/Amazon_Product_Analysis/Results/frequencies.csv')
     st.markdown("Choose the number of customers from the slider and then click the button to view.")
     num = st.slider("Choose a number", 0, 1000, key = "sl-1")
     button3 = st.button("Seller Analytics", key = "bt-1")
