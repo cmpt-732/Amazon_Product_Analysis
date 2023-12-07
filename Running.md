@@ -3,7 +3,7 @@
 ## Overview
 
 The dataset we have used is quite large and can't be uploaded to the GitHub repository since it is exceeding the maximum limit. So we have provided,
-the link to the data sets: [Drive Link](https://cseweb.ucsd.edu/~jmcauley/datasets/amazon_v2/).
+the link to the data sets: [Link](https://cseweb.ucsd.edu/~jmcauley/datasets/amazon_v2/).
 
 ## Setup
  Downloading the Dataset:
