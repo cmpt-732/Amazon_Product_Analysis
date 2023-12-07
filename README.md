@@ -1,7 +1,7 @@
 ## Demo
 
 The video/live demo for this project can been viewed here: 
-TODO
+[Video Demonstration](https://www.youtube.com/watch?v=-G7sMxim-Cg)
 
 ## Overview
 
@@ -10,7 +10,6 @@ customized and better recommendations to customers and improve the products sell
 
 Notes on how to run the code can be found in RUNNING.md, and a more detailed overview can be found in the project report (under Documents).
 ## Datasets: 
-
 We have used the Amazon Review Data 2018 data. Here we have used the 5-core subset and the metadata for the categories: 1) Clothing, Shoes, and Jewelry  2) Movies and Tv 3) Office Products. 
 Link to the datasets: [Dataset](https://cseweb.ucsd.edu/~jmcauley/datasets/amazon_v2/)
 
