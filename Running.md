@@ -3,11 +3,16 @@
 ## Overview
 
 The dataset we have used is quite large and can't be uploaded to the GitHub repository since it is exceeding the maximum limit. So we have provided,
-the link to the data sets: [Drive Link]().
+the link to the data sets: [Drive Link](https://cseweb.ucsd.edu/~jmcauley/datasets/amazon_v2/).
 
 ## Setup
-After downloading the Dataset folder.
-
+ Downloading the Dataset:
+Since we are using a dataset of total size of 27Gb we have provided the link to the dataset. So we are using 3 categories:
+a) Clothing,Shoes,and Jewelry b) Office products, c) Movies and Tv. So First download the datasets. For reference here a a screen shot from where data has to be downloaded. 
+We will  be downloading the reviews data as well as the meta data for that category:
+![](https://github.com/cmpt-732/Amazon_Product_Analysis/assets/54028832/4b073811-b4bf-4a8b-9cf2-a68828c64ff8)
+Download these files and store them in a folder named: Dataset.
+Then install the following packages:
 1. Streamlit: It's important to install this package so that we can use this for building the dashboard
 
     ``` pip install streamlit ```
