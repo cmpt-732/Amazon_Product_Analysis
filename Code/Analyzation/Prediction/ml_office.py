@@ -43,7 +43,7 @@ def main():
    
     # main logic starts here
     
-    reviews_path = '/Users/hersh/Documents/BigDataLab/Project/Office_Products.json'
+    reviews_path = '/Users/jarvis/Amazon_Product_Analysis/Dataset/Office_Products_5.json.gz'
     reviews = spark.read.json(reviews_path, schema=review_schema)
     reviews = reviews.where(reviews['verified'])
     reviews = reviews.withColumn('count', functions.lit(1))
@@ -68,7 +68,7 @@ def main():
         functions.count('count').alias('num_purchase'))
     weighted_avg.show(20)
     
-    meta_path = '/Users/hersh/Documents/BigDataLab/Project/meta_Office_Products.json'
+    meta_path = '/Users/jarvis/Amazon_Product_Analysis/Dataset/meta_Office_Products.json.gz'
     meta_data = spark.read.json(meta_path, schema=meta_schema)
     meta_data = meta_data.fillna(value = '0', subset = ['price'])
     meta_data.show()
@@ -151,7 +151,7 @@ def main():
     
     
     pd_merged = pd.concat([real.limit(1000).toPandas(), predicted.limit(1000).toPandas()], ignore_index=True, sort=False)
-    pd_merged.to_csv("ml_office.csv")
+    pd_merged.to_csv("/Users/jarvis/Amazon_Product_Analysis/Results/ml_office.csv")
     #fig = px.histogram(pd_merged, x = 'num_purchase', color = 'type', histnorm = 'percent')
     #fig.show()
     
