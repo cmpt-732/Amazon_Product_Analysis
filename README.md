@@ -15,19 +15,28 @@ Notes on how to run the code can be found in RUNNING.md, and a more detailed ove
 ```
 
 |-- Code
-    |--Recommendation
-        |-- Product Appraisal
-            |-- avg-hha174.py.py
-            |-- Clothes_shoes_Jewel.py
-        |-- Customer Preference
-            |-- category_frequency.py
     |--Analyzation
         |-- Keyword Extraction
-            |-- keywords.py
+            |-- keywords-clothing.py
+            |-- keywords-movies.py
+            |-- keywords-office.py
         |-- Perdiction
-            |-- ml-hha174.py 
+            |-- ml-clothing.py
+            |-- ml-movies.py
+            |-- ml-office.py
+    |--Recommendation
+        |-- Product Appraisal
+            |-- Clothes_shoes_jewel.py
+            |-- Movies_Tv.py
+            |-- Office_products.py
+        |-- Customer Preference
+            |-- category_frequency.py
     |--Visualization
-        |-- TODO.py
+        |-- app.py
+        |-- clothing_component.py
+        |-- frequency_component.py
+        |-- movie_component.py
+        |-- office_component.py
 |--requirements.txt
 |-- Documents
     |-- Project Proposal
@@ -36,13 +45,6 @@ Notes on how to run the code can be found in RUNNING.md, and a more detailed ove
 |-- RUNNING.md
 ```
 
-``` mermaid
-graph TD;
-    A-->B;
-    A-->C;
-    B-->D;
-    C-->D;
-```
 
 ## Team Members
 
